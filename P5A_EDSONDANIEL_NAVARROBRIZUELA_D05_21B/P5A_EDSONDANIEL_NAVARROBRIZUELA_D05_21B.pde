@@ -1,8 +1,8 @@
 void setup(){
-  size(200,300);
+  size(300,300);
   background(64,210,15);
   stroke(20,61,89);
-  frameRate(150);
+  frameRate(60);
   strokeWeight(6);
   point(1,1);
 }
@@ -16,17 +16,15 @@ ArrayList<Puntos> puntos = new ArrayList<Puntos>();
 void draw(){
   if(start){
     puntos.add(new Puntos(x,y));
-    if(puntos.size() > 10){
+    if(puntos.size() > 40){
       puntos.remove(0);
     }
     background(64,210,15);
     for(int k = 0; k < puntos.size(); k++){
       puntos.get(k).dibujar();
     }
-    
     direcciones();
     margen();
-    //println(puntos.size());
   }
 }
 
