@@ -37,9 +37,10 @@ void tiempo(){
 }
 
 void trazarSnake(){
-  if(puntos.size() > 10){
+  if(puntos.size() == 501)
+    noLoop(); 
+  if(puntos.size() > 10)
     puntos.remove(0);
-  }
   background(64,210,15);
   for(int k = 0; k < puntos.size(); k++){
     puntos.get(k).dibujar();
