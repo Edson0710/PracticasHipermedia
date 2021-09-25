@@ -1,28 +1,37 @@
 color fondo = color(144, 187, 12), pixel = color(52, 65, 53);
-int dir = 1, x = 60, y = 110, fps = 15, xA=1000, yA=1000;
+int dir = 1, x = 100, y = 120, fps = 12, xA=1000, yA=1000, iteraciones = 0;
+int segundos=5;
 boolean start = false, conteo = false, isEaten = true;
 ArrayList<Puntos> puntos = new ArrayList<Puntos>(); 
+PImage foto; 
 
 void setup(){
   background(fondo);
-  size(600, 500);
+  size(700, 500);
   frameRate(fps);
+  foto = loadImage("/marco.png"); 
   construirEscenario();
 }
 
 void draw(){
   if(start){
     construirEscenario();
+    tiempo();
     dibujarSnake();
   }
   //println(frameCount);
 }  
 
 void construirEscenario(){
+  background(fondo);
+  fill(pixel);
+  textSize(32);
+  text("Score: " + puntos.size(), 95, 75);
   stroke(pixel);
   strokeWeight(10);
   fill(fondo);
-  rect(50, 100, 500, 350);
+  rect(90, 110, 530, 340);
+  line(90, 90, width-80,90);
   if(isEaten && start){
     crearApple();
     dibujarManzana();
@@ -31,6 +40,8 @@ void construirEscenario(){
   else{
     dibujarManzana();
   }
+  image(foto, 0,0,width,height); 
+  
 }
 
 void dibujarSnake(){
@@ -41,7 +52,7 @@ void dibujarSnake(){
   strokeWeight(10);
   //if(puntos.size() == 501)
     //noLoop(); 
-  if(puntos.size() > 1400)
+  if(puntos.size() > 10)
     puntos.remove(0);
   for(int k = 0; k < puntos.size(); k++){
      puntos.get(k).dibujar();
@@ -59,11 +70,11 @@ void direcciones(){
 }
 
 void bordes(){
-  if(x <= 50)
+  if(x <= 90)
     dir = 1;
-  else if(x >= width-50)
+  else if(x >= width-80)
     dir = 2;
-  else if(y <= 100)
+  else if(y <= 110)
     dir = 3;
   else if(y >= height-50)
     dir = 4;
@@ -96,12 +107,13 @@ void crearApple(){
   do{
     aceptado = false;
     println("Flag");
-    xA = (int)random(6, 54) * 10;
-    yA = (int)random(11, 44) * 10;
+    xA = (int)random(10, 61) * 10;
+    yA = (int)random(12, 44) * 10;
+    
     for(int k = 0; k < puntos.size()-1; k++){
       if(xA == puntos.get(k).x && yA == puntos.get(k).y){
         aceptado = true;
-        println("Se creo dentro del cuerpo");
+        //println("Se creo dentro del cuerpo");
         break;
       }
     }
@@ -127,8 +139,25 @@ void comerManzana(){
 void chocarCuerpo(){
   Puntos punto = puntos.get(puntos.size()-1);
   for(int k = 0; k < puntos.size()-1; k++){
-    if(punto.x == puntos.get(k).x && punto.y == puntos.get(k).y)
-      println("Choque contra si mismo");
+    if(punto.x == puntos.get(k).x && punto.y == puntos.get(k).y){
+      //println("Choque contra si mismo");
+      fill(pixel);
+      textSize(32);
+      text("GAME OVER", 280, 300);
+      noLoop();
+    }
+  }
+}
+
+void tiempo(){
+  if(iteraciones < (fps*segundos)){
+    iteraciones++;
+  }
+  else{
+    iteraciones = 0;
+    puntos.add(new Puntos(x,y));  
+    bordes();
+    direcciones();
   }
 }
 
